@@ -72,8 +72,7 @@ export default function ExpenseModal(props) {
 								<Text style={styles.dateText}>Confirm</Text>
 							</View>
 						}
-						is24Hour={true}
-						mode={"datetime"}
+						mode={"date"}
 						datePickerContainerStyleIOS={{ borderRadius: 0 }}
 						titleIOS={"Pick a start date"}
 						isVisible={isDateTimePickerVisible.end}
@@ -93,7 +92,7 @@ export default function ExpenseModal(props) {
 					}}
 				>
 					<Text style={styles.datePickerButtonText}>
-						{formatDate(form.expense_date)} at {formatTime(form.expense_date)}
+						{formatDate(form.expense_date)}
 					</Text>
 				</TouchableOpacity>
 			)}

@@ -116,7 +116,6 @@ function AddModal(props) {
 							height: Dimensions.get("screen").height
 						}}
 					/>
-					
 					<TouchableHighlight
 						style={styles.close}
 						onPress={() => {

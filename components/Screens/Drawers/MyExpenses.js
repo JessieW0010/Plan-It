@@ -37,7 +37,8 @@ function MyExpensesScreen(props) {
 			<View style={styles.container}>
 				<Text style={styles.title}>Expenses</Text>
 			</View>
-			<ScrollView>
+			<ScrollView>	ImageBackground,
+	Dimensions
 				<ExpensesCards
 					items={props.user_expenses}
 					onUpdate={handleUpdate}

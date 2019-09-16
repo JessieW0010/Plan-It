@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
-export default function ExpenseCards({ items, onUpdate, user }) {
+export default function ExpenseCards({ items, onUpdate, userId:user }) {
   return (
     <View style={styles.container}>
       {/* Expense => e, Index => i */}
@@ -23,7 +23,7 @@ export default function ExpenseCards({ items, onUpdate, user }) {
                   }
                    {(user == e.borrower_id) && 
                   <View style={styles.cardTextContainer}>
-                    <Text style={styles.infoText}>You owe {e.lender_first_name} {e.lender_last_name} ${parseFloat(e.amount_owed_in_cents/100)}}</Text>
+                    <Text style={styles.infoText}>You owe {e.lender_first_name} {e.lender_last_name} ${parseFloat(e.amount_owed_in_cents/100)}</Text>
                   </View>
                    }
                 <Text style={styles.infoText}>From trip: {e.trip_name}</Text>
