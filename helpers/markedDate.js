@@ -1,6 +1,14 @@
 /* Function takes in an array of trips which has a start and end date and returns an object containing all the trips with their start date, end date, and all the dates in between and a color associated with each unique trip */
 
-const colors = ["lightblue", "limegreen", "cyan","red", "orange", "yellow", "lightgrey"];
+const colors = [
+	"red",
+	"orange",
+	"yellow",
+	"green",
+	"blue",
+	"indigo",
+	"lightgray"
+];
 
 Date.prototype.addDays = function(days) {
 	let date = new Date(this.valueOf());
