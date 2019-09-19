@@ -25,7 +25,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.plan-it" 
-    }
+      "bundleIdentifier": "com.yourcompany.plan-it"
+    },
+    "description": ""
   }
 }
