@@ -37,6 +37,41 @@ function receiveUserData(user, data) {
 	};
 }
 
+export const ERROR_USER_DATA = "ERROR_USER_DATA";
+
+function errorUserData(user, error) {
+	return {
+		type: ERROR_USER_DATA,
+		user_id: user,
+		isFetchingUser:  {
+			error: "Fetching user failed",
+			error_message: error
+		}
+	};
+}
+
+export function fetchUserData(user) {
+	return dispatch => {
+		dispatch(requestUserData(user));
+		return Promise.all([
+			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}`),
+			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}/trip`),
+			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}/transactions`),
+			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}/friend`)
+		])
+			.then(response => {
+				let data = response.map(res => res.json());
+				return Promise.all(data);
+			})
+			.then(data => {
+					return dispatch(receiveUserData(user, data));
+			})
+			.catch(error => {
+				return dispatch(errorUserData(user, error));
+			});
+	};
+}
+
 export const REQUEST_NEW_USER_TRIP = "REQUEST_NEW_USER_TRIP";
 
 function requestNewUserTrip(user_id, trip) {
@@ -85,24 +120,6 @@ export function addNewUserTrip(userId, trip) {
 	};
 }
 
-export function fetchUserData(user) {
-	return dispatch => {
-		dispatch(requestUserData(user));
-		return Promise.all([
-			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}`),
-			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}/trip`),
-			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}/transactions`),
-			fetch(`https://plan-it-api-1.herokuapp.com/user/${user}/friend`)
-		])
-			.then(response => {
-				let data = response.map(res => res.json());
-				return Promise.all(data);
-			})
-			.then(data => {
-				return dispatch(receiveUserData(user, data));
-			});
-	};
-}
 
 export const REQUEST_UPDATE_USERNAME = "REQUEST_UPDATE_USERNAME";
 
