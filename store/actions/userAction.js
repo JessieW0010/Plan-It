@@ -1,3 +1,20 @@
+// **********************************************************************************||
+// 				userAction file holds all actions related to users that are			 ||
+// 								dispatched to the store								 ||
+// **********************************************************************************||
+// 				The constant strings such as SELECT_USER are exported to the		 ||
+// 				userReducer and functions such as selectUser are exported to		 ||
+// 				screens that can perform those actions. Eg. selectUser in the		 ||
+// 				Login and SignUp screen.											 ||
+// 																					 ||
+// **********************************************************************************||
+
+
+
+// ----------------------------------------------------------------------------------
+// 		SELECT_USER => sets the selectedUser in the store, used on login/signup
+// ----------------------------------------------------------------------------------
+
 export const SELECT_USER = "SELECT_USER";
 
 export function selectUser(user) {
@@ -6,6 +23,12 @@ export function selectUser(user) {
 		user_id: user
 	};
 }
+
+// ----------------------------------------------------------------------------------
+// 		REQUEST_USER_DATA, RECEIVE_USER_DATA, ERROR_USER_DATA
+// 		=> creates a get request to fetch user details, trips, 
+//			expenses and friends
+// ----------------------------------------------------------------------------------
 
 export const REQUEST_USER_DATA = "REQUEST_USER_DATA";
 
@@ -67,10 +90,16 @@ export function fetchUserData(user) {
 					return dispatch(receiveUserData(user, data));
 			})
 			.catch(error => {
-				return dispatch(errorUserData(user, error));
+				console.log("Fetching user data failed >>> ", error)
+				return dispatch(errorUserData(user, "Fetching user data failed"));
 			});
 	};
 }
+
+// ----------------------------------------------------------------------------------
+// 		REQUEST_NEW_USER_TRIP, RECEIVED_NEW_USER_TRIP, ERROR_NEW_USER_TRIP
+// 		=> creates a post request to create a new trip for a user
+// ----------------------------------------------------------------------------------
 
 export const REQUEST_NEW_USER_TRIP = "REQUEST_NEW_USER_TRIP";
 
@@ -93,7 +122,18 @@ function receivedNewUserTrip(user_id, trip) {
 	};
 }
 
-export const ADD_NEW_USER_TRIP = "ADD_NEW_USER_TRIP";
+export const ERROR_NEW_USER_TRIP = "ERROR_NEW_USER_TRIP";
+
+function errorNewUserTrip(user_id) {
+	return {
+		type: ERROR_USER_DATA,
+		user_id,
+		isFetchingUser:  {
+			error: "Creating new trip failed"
+			// any other error info can go in here
+		}
+	};
+}
 
 export function addNewUserTrip(userId, trip) {
 	const request = new Request(
@@ -103,7 +143,8 @@ export function addNewUserTrip(userId, trip) {
 			headers: {
 				"Content-type": "application/json"
 			},
-			body: JSON.stringify({ trip: trip })
+			// changed below from { trip: trip }
+			body: JSON.stringify({ trip })
 		}
 	);
 	return dispatch => {
@@ -115,11 +156,22 @@ export function addNewUserTrip(userId, trip) {
 			.then(data => {
 				if (data.status === "ok") {
 					return dispatch(receivedNewUserTrip(userId, data.trip));
+				} else {
+					console.log("Creating new trip for user failed >>>",data.message)
+					return dispatch(errorNewUserTrip(userId))
 				}
+			})
+			.catch(error => {
+				console.log("Creating new trip, failed promise >>>", error)
+				return dispatch(errorNewUserTrip(userId))
 			});
 	};
 }
 
+// ----------------------------------------------------------------------------------
+// 		REQUEST_UPDATE_USERNAME, RECEIVE_UPDATE_USERNAME, ERROR_UPDATE_USERNAME
+// 		=> creates a post request to update user's username
+// ----------------------------------------------------------------------------------
 
 export const REQUEST_UPDATE_USERNAME = "REQUEST_UPDATE_USERNAME";
 
@@ -174,10 +226,15 @@ export function changeUsername(user, newUsername) {
 			})
 			.then(data => {
 				if (data.error) {
+					console.log("Error updating username >>>", data.error_message)
 					return dispatch(errorUpdateUsername(user, data));
 				} else {
 					return dispatch(receiveUpdateUsername(user, data));
 				}
+			})
+			.catch(error => {
+				console.log("Promise error, updating username >>>", error)
+				return dispatch(errorUpdateUsername(user, {error: "Update failed", error_message: "Saving new username failed"}))
 			});
 	};
 }
